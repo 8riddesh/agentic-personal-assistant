@@ -3,7 +3,7 @@
 Importing this module never needs environment variables and never opens a DB connection: the module-level ``app``
 is created lazily on first access (uvicorn's ``app.main:app`` triggers it), and connections open in the lifespan.
 """
-
+#testing commit
 from __future__ import annotations
 
 from collections.abc import AsyncIterator, Awaitable, Callable
