@@ -1,0 +1,47 @@
+name: deploy-backend
+
+# Deploys only after backend-ci succeeded on main (constitution §4: CI must be green before anything is deployed).
+on:
+  workflow_run:
+    workflows: ["backend-ci"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Trigger Render deploy
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          test -n "$RENDER_DEPLOY_HOOK_URL" || { echo "::error::RENDER_DEPLOY_HOOK_URL secret is not set"; exit 1; }
+          curl --fail --silent --show-error -X POST "$RENDER_DEPLOY_HOOK_URL" > /dev/null
+          echo "Deploy triggered for ${{ github.event.workflow_run.head_sha }}"
+
+      - name: Wait for /health to report the new commit
+        env:
+          RENDER_SERVICE_URL: ${{ secrets.RENDER_SERVICE_URL }}   # e.g. https://daily-assistant-api.onrender.com
+          EXPECTED_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          test -n "$RENDER_SERVICE_URL" || { echo "::error::RENDER_SERVICE_URL secret is not set"; exit 1; }
+          expected="${EXPECTED_SHA:0:7}"
+          for i in $(seq 1 30); do
+            body=$(curl --silent --max-time 20 "$RENDER_SERVICE_URL/health" || true)
+            echo "attempt $i: ${body:-<no response>}"
+            if echo "$body" | grep -q '"status":"ok"' && echo "$body" | grep -q "\"version\":\"$expected\""; then
+              echo "Healthy on $expected"; exit 0
+            fi
+            sleep 10
+          done
+          echo "::error::/health did not report status=ok on version $expected within 5 minutes"
+          exit 1

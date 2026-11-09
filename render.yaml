@@ -1,0 +1,41 @@
+# Render blueprint (plan §13). One FREE Docker web service; deploys are triggered by CI (deploy-backend.yml),
+# never automatically on push. Secrets are `sync: false` -> you type them once in the Render dashboard.
+services:
+  - type: web
+    name: daily-assistant-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /health
+    autoDeploy: false
+    envVars:
+      - key: ENV
+        value: prod
+      - key: LOG_LEVEL
+        value: INFO
+      - key: DATABASE_SSL
+        value: require
+      - key: JWT_TTL_DAYS
+        value: "30"
+      - key: ENCRYPTION_ACTIVE_KEY_ID
+        value: "1"
+      - key: DATABASE_URL
+        sync: false
+      - key: OWNER_EMAIL
+        sync: false
+      - key: OWNER_PASSWORD_HASH
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: ENCRYPTION_KEYS
+        sync: false
+      # Optional now - needed by later milestones (M2+ AI, M4 email):
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: BREVO_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        sync: false

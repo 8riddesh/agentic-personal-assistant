@@ -1,0 +1,56 @@
+name: mobile-ci
+
+on:
+  push:
+    paths: ["mobile/**", ".github/workflows/mobile-ci.yml"]
+  pull_request:
+    paths: ["mobile/**", ".github/workflows/mobile-ci.yml"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mobile-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: mobile
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # M1: when freezed / json_serializable / drift are added, add
+      #   `dart run build_runner build --delete-conflicting-outputs` here.
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test
+
+      - name: Build debug APK
+        run: flutter build apk --debug --dart-define=API_BASE_URL=https://example.invalid
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-apk
+          path: mobile/build/app/outputs/flutter-apk/app-debug.apk
+          retention-days: 7

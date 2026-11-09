@@ -1,0 +1,168 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="architecture" name="Architecture">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="&lt;b&gt;Personal Daily Assistant — System Architecture&lt;/b&gt;" style="text;html=1;fontSize=20;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="700" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="phone" value="Android phone — Flutter app" style="swimlane;startSize=30;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="420" height="520" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_shell" value="&lt;b&gt;app_shell&lt;/b&gt;&lt;br&gt;login · routing · API client · settings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="phone">
+          <mxGeometry x="20" y="50" width="180" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_tasks" value="&lt;b&gt;tasks&lt;/b&gt;&lt;br&gt;checklist · add task · verdict card" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="phone">
+          <mxGeometry x="220" y="50" width="180" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_chat" value="&lt;b&gt;chat&lt;/b&gt;&lt;br&gt;assistant · action proposals" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="phone">
+          <mxGeometry x="20" y="120" width="180" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_notif" value="&lt;b&gt;notifications&lt;/b&gt;&lt;br&gt;T-60 · T-30 · one completion check" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="phone">
+          <mxGeometry x="220" y="120" width="180" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_sched" value="&lt;b&gt;schedule&lt;/b&gt;&lt;br&gt;weekly fixed schedule editor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="phone">
+          <mxGeometry x="20" y="190" width="180" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_cal" value="&lt;b&gt;calendar_connect&lt;/b&gt;&lt;br&gt;per-day Google consent + import" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="phone">
+          <mxGeometry x="220" y="190" width="180" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_reports" value="&lt;b&gt;reports&lt;/b&gt;&lt;br&gt;Done-for-the-day flow · report viewer · Email this report" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="phone">
+          <mxGeometry x="20" y="260" width="380" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_secure" value="flutter_secure_storage&lt;br&gt;backend URL + JWT" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=10;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="phone">
+          <mxGeometry x="20" y="340" width="180" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_drift" value="drift (SQLite)&lt;br&gt;day cache + offline outbox" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=10;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="phone">
+          <mxGeometry x="220" y="340" width="180" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_os" value="Android local notifications (exact alarms) — work offline" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="phone">
+          <mxGeometry x="20" y="435" width="380" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="be" value="Render free web service — FastAPI modular monolith (Python 3.12 · uv · Docker)" style="swimlane;startSize=30;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="80" width="640" height="400" as="geometry"/>
+        </mxCell>
+        <mxCell id="b_core" value="&lt;b&gt;core&lt;/b&gt;&lt;br&gt;config · db · settings · errors · health" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="be">
+          <mxGeometry x="20" y="50" width="190" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="b_auth" value="&lt;b&gt;auth&lt;/b&gt;&lt;br&gt;email + password · JWT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="be">
+          <mxGeometry x="225" y="50" width="190" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="b_crypto" value="&lt;b&gt;crypto&lt;/b&gt;&lt;br&gt;AES-256-GCM field encryption" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" vertex="1" parent="be">
+          <mxGeometry x="430" y="50" width="190" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="b_tasks" value="&lt;b&gt;tasks&lt;/b&gt;&lt;br&gt;tasks · recurring templates · status" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="be">
+          <mxGeometry x="20" y="130" width="190" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="b_day" value="&lt;b&gt;day_cycle&lt;/b&gt;&lt;br&gt;open day · EOD · 12 AM auto-close" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="be">
+          <mxGeometry x="225" y="130" width="190" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="b_sched" value="&lt;b&gt;schedule&lt;/b&gt;&lt;br&gt;fixed blocks · calendar · free slots" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="be">
+          <mxGeometry x="430" y="130" width="190" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="b_feas" value="&lt;b&gt;feasibility&lt;/b&gt;&lt;br&gt;deterministic checks + Jev verdict" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="be">
+          <mxGeometry x="20" y="210" width="190" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="b_pred" value="&lt;b&gt;predictor&lt;/b&gt;&lt;br&gt;history-based end-time prediction" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="be">
+          <mxGeometry x="225" y="210" width="190" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="b_asst" value="&lt;b&gt;assistant&lt;/b&gt;&lt;br&gt;intents · questions · proposals" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="be">
+          <mxGeometry x="430" y="210" width="190" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="b_reports" value="&lt;b&gt;reports&lt;/b&gt;&lt;br&gt;pandas metrics · seaborn / matplotlib charts · PDF" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="be">
+          <mxGeometry x="20" y="290" width="190" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="b_email" value="&lt;b&gt;email&lt;/b&gt;&lt;br&gt;on-demand delivery only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="be">
+          <mxGeometry x="225" y="290" width="190" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="b_ai" value="&lt;b&gt;ai_gateway&lt;/b&gt;&lt;br&gt;Jev · Groq · OpenRouter · fallback · call log" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="be">
+          <mxGeometry x="430" y="290" width="190" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ext_db" value="&lt;b&gt;Supabase Postgres (free)&lt;/b&gt;&lt;br&gt;session pooler · personal text stored encrypted" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=12;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="80" width="240" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext_jev" value="&lt;b&gt;OpenRouter — Jev&lt;/b&gt;&lt;br&gt;typesafe/jev-1.14 · /api/v1/systemone&lt;br&gt;noul · score · choice" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="230" width="240" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext_groq" value="&lt;b&gt;Groq API (free tier)&lt;/b&gt;&lt;br&gt;language · extraction · fallback decisions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="315" width="240" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext_orfree" value="&lt;b&gt;OpenRouter :free model&lt;/b&gt;&lt;br&gt;text fallback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="390" width="240" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext_brevo" value="&lt;b&gt;Brevo email API (free)&lt;/b&gt;&lt;br&gt;or Gmail SMTP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="470" width="240" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext_inbox" value="My email inbox&lt;br&gt;(only when I ask)" style="shape=mxgraph.basic.envelope;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="560" width="160" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext_gcal" value="&lt;b&gt;Google Calendar API&lt;/b&gt;&lt;br&gt;calendar.readonly · on demand only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="40" y="680" width="240" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="gh" value="GitHub — repo + Actions (CI/CD)" style="swimlane;startSize=30;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="560" width="640" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="gh_ci" value="backend-ci · mobile-ci&lt;br&gt;uv · ruff · mypy · pytest · flutter test" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;" vertex="1" parent="gh">
+          <mxGeometry x="20" y="45" width="190" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="gh_deploy" value="deploy-backend&lt;br&gt;Render deploy hook" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;" vertex="1" parent="gh">
+          <mxGeometry x="225" y="45" width="190" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="gh_rel" value="release-apk&lt;br&gt;signed APK → GitHub Release" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;" vertex="1" parent="gh">
+          <mxGeometry x="430" y="45" width="190" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e_api" value="HTTPS · JSON · Bearer JWT&lt;br&gt;(mobile data)" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;startArrow=block;strokeWidth=2;" edge="1" parent="1" source="phone" target="be">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_gcal" value="events.list&lt;br&gt;(short-lived token, never sent to server)" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;dashed=1;" edge="1" parent="1" source="phone" target="ext_gcal">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_db" value="asyncpg + TLS&lt;br&gt;ciphertext only" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;startArrow=block;strokeWidth=2;" edge="1" parent="1" source="be" target="ext_db">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_jev" value="decisions" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" edge="1" parent="1" source="b_ai" target="ext_jev">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_groq" value="text / JSON" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" edge="1" parent="1" source="b_ai" target="ext_groq">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_orfree" value="fallback" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;dashed=1;" edge="1" parent="1" source="b_ai" target="ext_orfree">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_brevo" value="HTTP API" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" edge="1" parent="1" source="be" target="ext_brevo">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1250" y="440"/>
+              <mxPoint x="1250" y="495"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_inbox" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" edge="1" parent="1" source="ext_brevo" target="ext_inbox">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_deploy" value="deploy after green CI" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;dashed=1;" edge="1" parent="1" source="gh_deploy" target="be">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_apk" value="sideload APK" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;dashed=1;" edge="1" parent="1" source="gh_rel" target="phone">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1085" y="720"/>
+              <mxPoint x="400" y="720"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="legend" value="&lt;b&gt;Legend&lt;/b&gt;&lt;br&gt;Blue = mobile (Flutter features) · Green = backend modules · Yellow = external free services&lt;br&gt;Red = data at rest (encrypted by crypto module) · Purple = CI/CD · Dashed = on-demand / fallback" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="560" y="760" width="640" height="60" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,22 @@
+name: daily_assistant
+description: Personal Daily Assistant - Android client (Flutter).
+publish_to: "none"
+
+# X.Y.Z+N - N (versionCode) must strictly increase for in-place updates (plan §14.4).
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dio: ^5.7.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true

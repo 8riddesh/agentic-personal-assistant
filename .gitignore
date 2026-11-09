@@ -1,0 +1,36 @@
+# --- secrets (constitution P12 / DoD: no secret in the repo)
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+key.properties
+
+# --- Python / backend
+myenv/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# --- Flutter / Android (mobile)
+mobile/.dart_tool/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/.packages
+mobile/build/
+mobile/android/.gradle/
+mobile/android/local.properties
+mobile/android/**/GeneratedPluginRegistrant.*
+mobile/ios/
+*.iml
+.idea/
+
+# --- OS / editor
+.DS_Store
+Thumbs.db
