@@ -16,6 +16,9 @@ dependencies = [
     "asyncpg>=0.29",
     "alembic>=1.13",
     "tzdata>=2024.1",
+    "cryptography>=43",
+    "pwdlib[argon2]>=0.2.1",
+    "pyjwt>=2.9",
 ]
 
 [dependency-groups]

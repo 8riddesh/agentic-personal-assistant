@@ -4,6 +4,18 @@
 > app_shell is the **composition root** of the Flutter app: it owns bootstrap, configuration, the HTTP client,
 > authentication, routing, the shared drift database + offline outbox, settings and lifecycle hooks.
 
+> **M1 status: implemented** (2026-11-09) - bootstrap/config error screen, secure token storage, dio client (JWT
+> interceptor, retry/backoff and "server waking up" handling), login (sends the device timezone), router with auth
+> guard, settings screen, offline outbox + lifecycle coordinator. `flutter analyze` is clean, the unit/widget tests pass,
+> `flutter build apk --debug` succeeds, and `test/contract/backend_contract_test.dart` parses real backend responses.
+> **Deviations:** (1) no drift/SQLite and no freezed/json_serializable: they need `build_runner` code generation; M1
+> persists JSON documents (outbox, day cache, app_kv) behind `KeyValueStore` (`shared_preferences`) and uses
+> hand-written DTOs, so CI needs no codegen step. Revisit when the data volume or queries justify drift.
+> (2) `flutter_timezone` ^5 (returns `TimezoneInfo`; v2 does not build with current Gradle/Kotlin) and `timezone` ^0.10.
+> (3) `android/gradle.properties` sets `kotlin.incremental=false` (Windows dev machine with the project and the pub cache
+> on different drives breaks Kotlin's incremental cache). **Not verified on a device/emulator:** secure-storage behaviour,
+> cold-start retry timing on the real Render server.
+
 ## 1. Purpose & scope
 
 | Capability | Contribution |

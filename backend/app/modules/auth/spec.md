@@ -1,7 +1,8 @@
 # Module spec — `backend/auth`
 
 > Status: draft v1 · 2026-11-08 · Governed by `constitution.md` (P1, P12) and `plan.md` (§4.1, §5.1, §6.1, §12.1).
-> Milestone: M1.
+> Milestone: M1. **Status: implemented** (2026-11-09); AUTH-AC-01..10 are covered by `tests/auth/test_auth.py`.
+> `current_user` and the services use `SessionDep` (the function-scoped session of core) so a request shares one session.
 
 ## 1. Purpose & scope
 

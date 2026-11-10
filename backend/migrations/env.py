@@ -37,6 +37,7 @@ target_metadata = Base.metadata
 
 _TEXT_TYPES = {"EncryptedText", "EncryptedJSON"}
 _BYTES_TYPES = {"EncryptedBytes"}
+_DATETIME_TYPES = {"UTCDateTime"}
 
 
 def render_item(type_: str, obj: Any, autogen_context: Any) -> str | bool:
@@ -49,6 +50,9 @@ def render_item(type_: str, obj: Any, autogen_context: Any) -> str | bool:
         if name in _BYTES_TYPES:
             autogen_context.imports.add("import sqlalchemy as sa")
             return "sa.LargeBinary()"
+        if name in _DATETIME_TYPES:
+            autogen_context.imports.add("import sqlalchemy as sa")
+            return "sa.DateTime(timezone=True)"
     return False
 
 

@@ -2,9 +2,18 @@
 
 > Status: draft v1 · 2026-11-08 · Governed by `constitution.md` and `plan.md` (§2.3, §4.1, §5.2, §7, §12.1, §13, §15).
 > Milestone: M0 (config, db, errors, logging, health, main) / M1 (app_settings).
-> **M0 status: implemented.** Not yet built (M1): `models.py`, `repository.py`, `service.py`, the `/settings` router,
-> `AppSettings*` DTOs, the `app_settings` migration, the `crypto.CryptoError` handler, and mounting of auth-guarded
-> routers in `app/main.py`. `migrations/versions/` is empty, so `alembic upgrade head` is a no-op until M1.
+> **M0 + M1 status: implemented** (2026-11-09). `app_settings` model/repository/service, `GET/PATCH /settings`,
+> `AppSettingsDTO/Patch`, migration `core: create app_settings`, the `crypto.CryptoError` -> 500 `data_integrity`
+> handler and the auth-guarded router mounting in `app/main.py` are done.
+> Additions beyond this spec: `UTCDateTime` (a `timestamptz` TypeDecorator that rejects naive datetimes and returns
+> aware UTC on every dialect), `enum_type()` (the varchar+CHECK enum helper of §4.2), `eager_defaults` on
+> `TimestampMixin` (timestamps are fetched in the same statement; async code cannot lazy-load them), and
+> `create_app` / lifespan read `app.state.engine_factory` (default `build_engine`) so tests can inject another engine.
+> Deviation: the lifespan's owner seeding tolerates a pure connectivity failure (`OSError`/`SQLAlchemyError`): it logs
+> `owner seeding skipped` and keeps starting so `/health` can report 503 (§9; Alembic already needed the DB on container
+> start). An invalid `OWNER_PASSWORD_HASH` still aborts startup.
+> Postgres-only checks (`test_health_ok`, up/down/up, models-match-migrations) run in CI only; locally the suite runs on
+> SQLite (`tests/conftest.py`).
 
 ## 1. Purpose & scope
 

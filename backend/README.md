@@ -23,6 +23,17 @@ Run the Postgres-backed tests locally with any Postgres 16:
 
 `uv run python scripts/export_openapi.py` regenerates `openapi.json`; CI fails if it is not committed.
 
+## First run (M1)
+
+```powershell
+uv run python -m app.modules.auth.hash_password   # prompts twice, prints the argon2id hash for OWNER_PASSWORD_HASH
+# ENCRYPTION_KEYS: python -c "import os,base64; print('1:'+base64.b64encode(os.urandom(32)).decode())"
+```
+
+The owner account is seeded from `OWNER_EMAIL` / `OWNER_PASSWORD_HASH` on first start (an existing row is never
+changed). `uv run python scripts/export_mobile_fixtures.py` records real API responses for the Flutter contract test
+(`mobile/test/contract/backend_contract_test.dart`); re-run it whenever a response shape changes.
+
 ## Layout
 
 `app/main.py` is the composition root; each folder in `app/modules/` is one module with its own `spec.md`. A module

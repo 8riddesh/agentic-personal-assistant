@@ -1,7 +1,17 @@
 # Module spec — `backend/tasks`
 
 > Governed by [`constitution.md`](../../../../constitution.md) and [`plan.md`](../../../../plan.md) (§4.1, §5.4, §7, §8.1, §8.4, §10.1).
-> Status: draft for M1 (prediction wiring active from M3, feasibility link from M2).
+> Status: **M1 implemented** (2026-11-09); prediction wiring (port) is active from M3, the feasibility link from M2.
+> Covered by `tests/tasks/` (rules, service, API). Notes on the implementation:
+> - `local_to_utc` is exported from the package root (day_cycle needs it for local 23:59:59; roots-only boundary rule).
+> - `get_end_time_predictor()` returns `None` in M1; `app.main` overrides it when `predictor` exists.
+> - `TaskService.today()` and `TemplateRepository.list_all()` are small additions; `GET /tasks` defaults to `today()`.
+> - `task.unknown_assessment` (FK violation) is wired but **cannot be tested until M2** adds the foreign key on
+>   `task.feasibility_id`; until then any `assessment_id` is stored as given.
+> - Extra 422 codes: `task.invalid_category`, `task.date_out_of_range`, `task.override_requires_assessment`,
+>   `task.finished_in_future|finished_before_start|finished_too_late|finished_before_day`,
+>   `task.postpone_target_missing|postpone_date_mismatch|postpone_in_past|postpone_noop`.
+> - The PG-only `CHECK (recurrence->>'freq' ...)` lives in the migration only; Pydantic validates the shape.
 
 ## 1. Purpose & scope
 

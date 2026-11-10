@@ -16,6 +16,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.modules.core.logs import get_logger, get_request_id
 from app.modules.core.schemas import FieldError, ProblemDetails
+from app.modules.crypto import CryptoError
 
 logger = get_logger("app.errors")
 
@@ -171,6 +172,20 @@ async def _handle_http_exception(request: Request, exc: Exception) -> JSONRespon
     )
 
 
+async def _handle_crypto_error(request: Request, exc: Exception) -> JSONResponse:
+    assert isinstance(exc, CryptoError)
+    # Never log values; the class name (e.g. DecryptionError) is enough to diagnose.
+    logger.error("data integrity error", extra={"error_type": type(exc).__name__})
+    return problem_response(
+        request,
+        status=500,
+        title="Internal error",
+        problem_type="/problems/internal",
+        code="data_integrity",
+        detail="Stored data could not be read.",
+    )
+
+
 async def _handle_unexpected(request: Request, exc: Exception) -> JSONResponse:
     # Logged with traceback (no locals); the response stays generic.
     logger.error("unhandled exception", exc_info=exc, extra={"error_type": type(exc).__name__})
@@ -188,5 +203,5 @@ def install_error_handlers(app: FastAPI) -> None:
     app.add_exception_handler(AppError, _handle_app_error)
     app.add_exception_handler(RequestValidationError, _handle_request_validation)
     app.add_exception_handler(StarletteHTTPException, _handle_http_exception)
+    app.add_exception_handler(CryptoError, _handle_crypto_error)
     app.add_exception_handler(Exception, _handle_unexpected)
-    # M1 (crypto): register `crypto.CryptoError` -> 500 `data_integrity` here.

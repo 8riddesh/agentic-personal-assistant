@@ -1,7 +1,10 @@
 # Module spec — `backend/crypto`
 
 > Status: draft v1 · 2026-11-08 · Governed by `constitution.md` (P11, P12) and `plan.md` (§4.1, §5, §6.2, ADR-004).
-> Milestone: M1.
+> Milestone: M1. **Status: implemented** (2026-11-09); CRYPTO-AC-01..12 are covered by `tests/crypto/` (the raw-row test uses
+> a SQLite probe table; `tests/crypto/test_locked_columns.py` checks the §7.7 registry against the models and `plan.md` §5).
+> `rotate.py` is intentionally only a docstring outline (plan §18). Each concrete decorator sets `cache_ok = True` itself
+> (SQLAlchemy checks the class `__dict__`).
 
 ## 1. Purpose & scope
 

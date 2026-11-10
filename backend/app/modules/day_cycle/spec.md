@@ -1,7 +1,19 @@
 # Module spec — `backend/day_cycle`
 
 > Governed by [`constitution.md`](../../../../constitution.md) and [`plan.md`](../../../../plan.md) (§4.1, §5.5, §7, §8.3, §8.4, ADR-010).
-> Status: draft for M1 (report/predictor steps become real in M3/M4; before that they are no-ops via stubs).
+> Status: **M1 implemented** (2026-11-09); the report/predictor steps become real in M3/M4. Covered by `tests/day_cycle/`.
+> Notes on the implementation:
+> - `predictor` and `reports` do not exist yet, so the pipeline talks to them through ports defined here
+>   (`PredictorHook`, `ReportGenerator` with an `enabled` flag) with `NullPredictorHook` / `NullReportGenerator` wired by
+>   `app.main`. With `enabled = False` the report steps and the weekly-pending rule are skipped, so a closed day is never
+>   re-scheduled forever. M3/M4 replace the null ports with adapters (the report adapter opens its own session).
+> - The per-date pipeline lock is a session-level advisory lock held on a **dedicated** connection for the whole run
+>   (the pooled session connection is released after each commit and would lose it). Postgres only.
+> - A pipeline failure on the last allowed attempt closes the day immediately (`DAY_CLOSE_MAX_ATTEMPTS` real attempts);
+>   closed days owed a weekly report are bounded by the same counter.
+> - `ensure_current_day` memoises `(tz, today, checked_at)` and re-checks when the local date changes, so the midnight
+>   close is never delayed by the memo. The memo is also refreshed by the `/days` routes.
+> - `DAY-AC-06` (concurrent close) runs only against Postgres (CI); locally it is skipped.
 
 ## 1. Purpose & scope
 

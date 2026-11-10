@@ -4,6 +4,16 @@
 > Device-local reminders and completion checks. The server is never involved in *when* a notification fires; it only
 > receives the answers.
 
+> **M1 status: implemented for the T-60/T-30 reminders** (2026-11-09) - pure planner (rules R1-R13, deterministic ids,
+> content hashes), reconcile diff, single-flight reconciler, `flutter_local_notifications` gateway (channels, exact vs
+> inexact mode), permission card, battery-optimisation guide, manifest permissions/receivers (verified in the merged
+> debug manifest). Every rule R1-R13 and AC-01/03/04/05/06/12/14/16 has a unit test (`test/features/notifications/`).
+> **Not in M1 (planned for M3):** the completion check, the Done / Not yet actions, the late-Done flow and the ETA
+> follow-up. The planner already supports them behind `checksEnabled` (tested), but nothing enables it yet.
+> **Backend answers to the open questions:** Q2 yes (`check-response done` completes with `notification_action`);
+> Q3 `done` after `not_yet` is accepted, and an *identical* repeated `not_yet` is a 200 no-op (not a 409).
+> **Not verified on a device/emulator:** actual delivery, exact-alarm permission flow, reboot persistence.
+
 ## 1. Purpose & scope
 
 | Capability | Contribution |

@@ -4,6 +4,16 @@
 > Owns the Today checklist, the add/edit task flow with the feasibility verdict card, status actions, recurring
 > templates management and the drift cache of the open day.
 
+> **M1 status: implemented** (2026-11-09) - Today checklist, add/edit task (always asks one-time vs recurring, daily or
+> weekday picker), status sheet (completed / postponed / cancelled / can't do with reason), recurring-templates screen,
+> open-day cache with optimistic offline answers. The feasibility verdict card is built but **gated off**
+> (`feasibilityEnabledProvider = false`) until backend M2; the app then saves directly ("Add task").
+> Deviation: the open-day cache is a JSON document in `KeyValueStore`, not drift (see app_shell status).
+> Fixed while integrating with the real backend: the Today controller waits for the restored session
+> (`await authControllerProvider.future`) instead of failing during startup, and all `AsyncValue` reads use
+> `valueOrNull` (in Riverpod 2.6 `AsyncError.value` throws, which crashed the Retry path).
+> Covered by `test/features/tasks/` and the contract test (request bodies and response shapes match the backend).
+
 ## 1. Purpose & scope
 
 | Capability | Contribution |

@@ -1,30 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../data/app_config.dart';
-import '../data/health_api.dart';
-import 'home_screen.dart';
+import '../../notifications/presentation/providers.dart';
+import 'lifecycle_coordinator.dart';
+import 'router.dart';
+import 'theme.dart';
 
-ThemeData _theme(Brightness brightness) => ThemeData(
-      useMaterial3: true,
-      colorSchemeSeed: Colors.indigo,
-      brightness: brightness,
-    );
-
-/// Root widget. M0 shows a single connectivity screen; the login screen, router and the four-tab shell
-/// (Today, Chat, Reports, Settings) arrive with M1 (app_shell spec §7).
-class App extends StatelessWidget {
-  const App({super.key, required this.config, required this.healthApi});
-
-  final AppConfig config;
-  final HealthApi healthApi;
+/// Root widget: go_router, light/dark theme, lifecycle hooks and the notification sync (kept alive here).
+class App extends ConsumerWidget {
+  const App({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(notificationSyncProvider);
+    final router = ref.watch(routerProvider);
+    return MaterialApp.router(
       title: 'Daily Assistant',
-      theme: _theme(Brightness.light),
-      darkTheme: _theme(Brightness.dark),
-      home: HomeScreen(config: config, healthApi: healthApi),
+      theme: buildTheme(Brightness.light),
+      darkTheme: buildTheme(Brightness.dark),
+      routerConfig: router,
+      builder: (context, child) => LifecycleCoordinator(child: child ?? const SizedBox.shrink()),
     );
   }
 }
@@ -39,7 +34,7 @@ class ConfigErrorApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Daily Assistant',
-      theme: _theme(Brightness.light),
+      theme: buildTheme(Brightness.light),
       home: Scaffold(
         body: SafeArea(
           child: Padding(
